@@ -24,6 +24,8 @@ if __name__ == '__main__':
 # S3 - UPLOAD IMAGE
 @application.route('/upload_image', methods=['POST'])
 def upload_image():
+    return Response(json.dumps({'Output': 'Hello World'}), mimetype='application/json', status=200)
+'''
     bucket = 'jce-cloud-project'
     img = request.files['img']
     s3 = boto3.resource('s3', region_name='us-east-1')
@@ -52,3 +54,4 @@ def upload_image():
 
 
     return {"img_url": img_url, "confidence": confidence, "sharpness": sharpness}
+    '''
