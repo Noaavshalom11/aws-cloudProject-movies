@@ -18,8 +18,7 @@ def get():
 def post():
     return Response(json.dumps({'Output': 'Hello World'}), mimetype='application/json', status=200)
 
-if __name__ == '__main__':
-    flaskrun(application)
+
 
 # S3 - UPLOAD IMAGE
 @application.route('/upload_image', methods=['GET'])
@@ -55,3 +54,6 @@ def upload_image():
 
     return {"img_url": img_url, "confidence": confidence, "sharpness": sharpness}
     '''
+    
+    if __name__ == '__main__':
+    flaskrun(application)
