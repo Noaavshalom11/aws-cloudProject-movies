@@ -22,7 +22,7 @@ if __name__ == '__main__':
     flaskrun(application)
 
 # S3 - UPLOAD IMAGE
-@application.route('/upload_image', methods=['POST'])
+@application.route('/upload_image', methods=['GET'])
 def upload_image():
     return Response(json.dumps({'Output': 'Hello World'}), mimetype='application/json', status=200)
 '''
