@@ -6,8 +6,6 @@ from flask_cors import CORS
 import boto3
 import requests
 import uuid
-from boto3.dynamodb.conditions import Key
-from boto3.dynamodb.conditions import Attr
 
 application = Flask(__name__)
 CORS(application, resources={r"/*": {"origins": "*"}}) 
@@ -107,28 +105,14 @@ def add_review():
 
 # GET REVIEWS BY ID
 
-@application.route('/get_reviews_by_id', methods=['POST'])
+@application.route('/get_reviews_by_id', methods=['GET'])
 def get_reviews_by_id():
-    data = request.data
-    data_json = json.loads(data)
-    imdb_id = data_json['imdb_id']
-    print(imdb_id)
-
-    
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
-    table = dynamodb.Table('reviews')
-    print(table)
+    table = dynamodb.Table('departments')
+    response = table.scan()
+    departments = response['Items']
 
-    respponse = table.scan(FilterExpression=Attr("imdb_id").eq(imdb_id))
-
-    print(respponse)
-
-    
-
-    return Response(json.dumps(respponse['Items']), mimetype='application/json', status=200)    
-    
-# curl -i -X POST -H "Content-Type: application/json" -d '{"imdb_id": "tt10648342"}' http://localhost:8000/get_reviews_by_id
-
+    return Response(json.dumps(departments), mimetype='application/json', status=200)    
 
 if __name__ == '__main__':
     flaskrun(application)
