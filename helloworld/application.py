@@ -19,6 +19,19 @@ def post():
     return Response(json.dumps({'Output': 'Hello World'}), mimetype='application/json', status=200)
 
 
+# ADD JOB
+
+@application.route('/add_user', methods=['POST'])
+def add_user():
+    data = request.get_json()
+    dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
+    table = dynamodb.Table('users')
+    table.put_item(Item=data)
+    
+    return Response(json.dumps({'Output': 'Hello World'}), mimetype='application/json', status=200)
+# TEST -
+# curl -i -X POST -H "Content-Type: application/json" -d '{"user_id": "1"}' http://localhost:8000/add_job
+
 
 # upload and analyze profile image
 @application.route('/upload_image', methods=['POST'])
