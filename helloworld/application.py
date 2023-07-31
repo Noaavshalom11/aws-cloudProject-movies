@@ -88,5 +88,22 @@ def get_user():
 
     return Response(json.dumps({"img_url": img_url, "user_name": user_name}), mimetype='application/json', status=200)
 
+
+@application.route('/add_review', methods=['POST'])
+def add_review():
+    data = request.get_json()
+    dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
+    table = dynamodb.Table('reviews')
+    review_id = (str(uuid.uuid4()))
+    data['review_id'] = review_id
+    print(data)
+    table.put_item(Item=data)
+    
+    return Response(json.dumps({'Output': 'Hello World'}), mimetype='application/json', status=200)
+# TEST -
+# curl -i -X POST -H "Content-Type: application/json" -d '{"user_id": "xxxxxxxxxxxxxxx"}' http://localhost:8000/add_review
+
+
+
 if __name__ == '__main__':
     flaskrun(application)
