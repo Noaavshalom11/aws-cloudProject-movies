@@ -20,6 +20,7 @@ def post():
 
 
 
+# upload and analyze profile image
 @application.route('/upload_image', methods=['POST'])
 def upload_image():
     bucket = 'jce-cloud-project'
@@ -43,14 +44,14 @@ def upload_image():
     }
     )
     
+    try:
+        confidence = response['FaceDetails'][0]['Confidence'];
+        return {"img_url": img_url, "confidence": confidence}
+        
+    except:
+        return {"img_url": img_url, "confidence": "no_match"}
     
-    print(response['FaceDetails'][0]['Confidence'])
-    confidence = response['FaceDetails'][0]['Confidence'];
-    sharpness = response['FaceDetails'][0]['Quality']['Sharpness'];
 
-
-    return {"img_url": img_url, "confidence": confidence, "sharpness": sharpness}
-    
 
 
 if __name__ == '__main__':
