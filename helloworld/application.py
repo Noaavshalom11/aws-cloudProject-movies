@@ -30,7 +30,7 @@ def add_user():
     
     return Response(json.dumps({'Output': 'Hello World'}), mimetype='application/json', status=200)
 # TEST -
-# curl -i -X POST -H "Content-Type: application/json" -d '{"user_id": "1"}' http://localhost:8000/add_job
+# curl -i -X POST -H "Content-Type: application/json" -d '{"user_id": "xxxxxxxxxxxxxxx"}' http://localhost:8000/add_user
 
 
 # upload and analyze profile image
@@ -65,7 +65,28 @@ def upload_image():
         return {"img_url": img_url, "confidence": "no_match"}
     
 
+@application.route('/get_user', methods=['POST'])
+def get_user():
+    data = request.data
+    data_json = json.loads(data)
+    user_id = data_json['user_id']
 
+    print(user_id)
+
+    dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
+    table = dynamodb.Table('users')
+    respponse = table.get_item(Key={
+            'user_id': user_id,
+    })
+    
+    print(respponse)
+
+    
+    img_url = respponse['Item']['img_url']
+    user_name = respponse['Item']['user_name']
+
+
+    return Response(json.dumps({"img_url": img_url, "user_name": user_name}), mimetype='application/json', status=200)
 
 if __name__ == '__main__':
     flaskrun(application)
