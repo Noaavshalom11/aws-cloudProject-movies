@@ -133,5 +133,20 @@ def get_reviews_by_id():
 # curl -i -X POST -H "Content-Type: application/json" -d '{"imdb_id": "tt10648342"}' http://localhost:8000/get_reviews_by_id
 
 
+@application.route('/add_movie_data', methods=['POST'])
+def add_movie_data():
+    data = request.get_json()
+    dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
+    table = dynamodb.Table('reviews')
+    movie_id  = (str(uuid.uuid4()))
+    data['movie_id'] = movie_id
+    print(data)
+    table.put_item(Item=data)
+    
+    return Response(json.dumps({'Output': 'Hello World'}), mimetype='application/json', status=200)
+# TEST -
+# curl -i -X POST -H "Content-Type: application/json" -d '{"user_id": "xxxxxxxxxxxxxxx"}' http://localhost:8000/add_review
+
+
 if __name__ == '__main__':
     flaskrun(application)
