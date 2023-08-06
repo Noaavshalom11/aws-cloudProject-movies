@@ -145,7 +145,33 @@ def add_movie_data():
     
     return Response(json.dumps({'Output': 'Hello World'}), mimetype='application/json', status=200)
 # TEST -
-# curl -i -X POST -H "Content-Type: application/json" -d '{"user_id": "xxxxxxxxxxxxxxx"}' http://localhost:8000/add_review
+# curl -i -X POST -H "Content-Type: application/json" -d '{"user_id": "xxxxxxxxxxxxxxx"}' http://localhost:8000/add_movie_data
+
+
+
+@application.route('/get_movie_by_id', methods=['POST'])
+def get_movie_by_id():
+    data = request.data
+    data_json = json.loads(data)
+    imdb_id = data_json['imdb_id']
+    print(imdb_id)
+
+    
+    dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
+    table = dynamodb.Table('movies')
+    print(table)
+
+    respponse = table.scan(FilterExpression=Attr("imdb_id").eq(imdb_id))
+
+    print(respponse)
+
+    
+
+    return Response(json.dumps(respponse['Items']), mimetype='application/json', status=200)    
+    
+# curl -i -X POST -H "Content-Type: application/json" -d '{"imdb_id": "tt10648342"}' http://localhost:8000/get_reviews_by_id
+
+
 
 
 if __name__ == '__main__':
