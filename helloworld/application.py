@@ -137,7 +137,7 @@ def get_reviews_by_id():
 def add_movie_data():
     data = request.get_json()
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
-    table = dynamodb.Table('reviews')
+    table = dynamodb.Table('movies')
     movie_id  = (str(uuid.uuid4()))
     data['movie_id'] = movie_id
     print(data)
