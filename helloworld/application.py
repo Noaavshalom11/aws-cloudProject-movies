@@ -8,6 +8,9 @@ import requests
 import uuid
 from boto3.dynamodb.conditions import Key
 from boto3.dynamodb.conditions import Attr
+import simplejson as json 
+
+
 
 application = Flask(__name__)
 CORS(application, resources={r"/*": {"origins": "*"}}) 
